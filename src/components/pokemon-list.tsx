@@ -36,9 +36,16 @@ export async function PokemonList({
 
   return (
     <div className="space-y-4">
-      <p className="text-center text-sm text-muted-foreground">
-        Showing page {currentPage} of {totalPages} | Total results: {totalCount}
-      </p>
+      {totalPages > 0 ? (
+        <p className="text-center text-sm text-muted-foreground">
+          Showing page {currentPage} of {totalPages} | Total results:{' '}
+          {totalCount}
+        </p>
+      ) : (
+        <p className="text-center text-sm text-muted-foreground">
+          No results found
+        </p>
+      )}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {pokemonList.map((pokemon: { name: string; id: string }) => (
           <div
@@ -68,33 +75,35 @@ export async function PokemonList({
           </div>
         ))}
       </div>
-      <div className="flex justify-center space-x-4">
-        <SelectPage totalPages={totalPages} />
-        {previousPage && (
-          <Button asChild>
-            <Link
-              href={
-                query
-                  ? `/?page=${previousPage}&q=${query}`
-                  : `/?page=${previousPage}`
-              }
-            >
-              <ChevronLeftIcon className="mr-2 h-4 w-4" /> Previous
-            </Link>
-          </Button>
-        )}
-        {nextPage && (
-          <Button asChild>
-            <Link
-              href={
-                query ? `/?page=${nextPage}&q=${query}` : `/?page=${nextPage}`
-              }
-            >
-              Next <ChevronRightIcon className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        )}
-      </div>
+      {totalPages > 0 && (
+        <div className="flex justify-center space-x-4">
+          <SelectPage totalPages={totalPages} />
+          {previousPage && (
+            <Button asChild>
+              <Link
+                href={
+                  query
+                    ? `/?page=${previousPage}&q=${query}`
+                    : `/?page=${previousPage}`
+                }
+              >
+                <ChevronLeftIcon className="mr-2 h-4 w-4" /> Previous
+              </Link>
+            </Button>
+          )}
+          {nextPage && (
+            <Button asChild>
+              <Link
+                href={
+                  query ? `/?page=${nextPage}&q=${query}` : `/?page=${nextPage}`
+                }
+              >
+                Next <ChevronRightIcon className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          )}
+        </div>
+      )}
     </div>
   );
 }
